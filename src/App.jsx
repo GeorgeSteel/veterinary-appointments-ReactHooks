@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function Date({date, index, deleteDate}) {
   return(
@@ -98,7 +98,13 @@ function Form(props) {
 }
 
 function App() {
-  const [date, setDate] = useState([]);
+  let initialDates = JSON.parse(localStorage.getItem('dates'));
+
+  if (!initialDates) {
+    initialDates = [];
+  }
+
+  const [date, setDate] = useState(initialDates);
 
   // add new dates into the state
   const createDate = newDate => {
@@ -115,8 +121,21 @@ function App() {
     setDate(newDates);
   }
 
+  useEffect(
+    () => {
+      let initialDates = JSON.parse(localStorage.getItem('dates'));
+
+      if (initialDates) {
+        localStorage.setItem('dates', JSON.stringify(date));
+      } else {
+        localStorage.setItem('dates', JSON.stringify([]));
+      }
+    }, [date]
+  )
+
   // set the title conditionally
   const title = date.length === 0 ? 'No dates added' : 'Dates Management';
+
   return (
     <React.Fragment>
       <h1>Patient Manager</h1>
