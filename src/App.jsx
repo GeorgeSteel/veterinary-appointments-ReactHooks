@@ -1,29 +1,49 @@
 import React, { useState } from 'react';
 
-function Form() {
-  const [appointment, setAppointment] = useState({
+function Date({date}) {
+  return(
+    <div className="cita">
+      <p>Pet: <span>{ date.pet }</span></p>
+      <p>Owner: <span>{ date.owner }</span></p>
+      <p>Date: <span>{ date.date }</span></p>
+      <p>Hour: <span>{ date.hour }</span></p>
+      <p>Symptoms: <span>{ date.symptoms }</span></p>
+    </div>
+  )
+}
+
+function Form(props) {
+  const initialState = {
     pet: '',
     owner: '',
     date: '',
     hour: '',
     symptoms: ''
-  });
+  };
 
-  console.log(appointment);
+  const [appointment, setAppointment] = useState(initialState);
 
-  const handleChange = e =>  {
-    e.preventDefault();
-
+  const handleChange = e => {
     setAppointment({
       ...appointment,
       [e.target.name]: e.target.value
     });
   }
 
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    // send the date to the main componennt
+    props.createDate(appointment);
+
+    // reset form
+    setAppointment(initialState);
+  }
+
   return (
     <React.Fragment>
       <h2>Add Appointment</h2>
-      <form>
+      <form onSubmit={ handleSubmit }>
         <label>Pet's Name</label>
         <input 
           type="text" 
@@ -31,6 +51,7 @@ function Form() {
           className="u-full-width" 
           placeholder="Pet's Name" 
           onChange={ handleChange }
+          value={ appointment.pet }
         />
 
         <label>Owner's Name</label>
@@ -40,6 +61,7 @@ function Form() {
           className="u-full-width"  
           placeholder="Owner's Name" 
           onChange={ handleChange }
+          value={ appointment.owner }
         />
 
         <label>Date</label>
@@ -48,6 +70,7 @@ function Form() {
           className="u-full-width"
           name="date"
           onChange={ handleChange }
+          value={ appointment.date }
         />               
 
         <label>Hour</label>
@@ -56,6 +79,7 @@ function Form() {
           className="u-full-width"
           name="hour" 
           onChange={ handleChange }
+          value={ appointment.hour }
         />
 
         <label>Symptoms</label>
@@ -63,6 +87,7 @@ function Form() {
           className="u-full-width"
           name="symptoms"
           onChange={ handleChange }
+          value={ appointment.symptoms }
         ></textarea>
 
         <button type="submit" className="button-primary u-full-width">Add</button>
@@ -74,16 +99,31 @@ function Form() {
 function App() {
   const [date, setDate] = useState([]);
 
+  // add new dates into the state
+  const createDate = newDate => {
+    const newDates = [...date, newDate];
+    // save in the state
+    setDate(newDates);
+  }
+
   return (
     <React.Fragment>
       <h1>Patient Manager</h1>
       <div className="container">
         <div className="row">
           <div className="one-half column">
-            <Form/>
+            <Form 
+              createDate={ createDate }
+            />
           </div>
           <div className="one-half column">
-
+            { date.map((date, idx) => (
+              <Date
+                key={idx}
+                index={idx}
+                date={date}
+              />
+            )) }
           </div>
         </div>
       </div>
