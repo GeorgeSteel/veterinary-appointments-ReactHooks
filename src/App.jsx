@@ -1,45 +1,68 @@
 import React, { useState } from 'react';
 
 function Form() {
-  return (
+  const [appointment, setAppointment] = useState({
+    pet: '',
+    owner: '',
+    date: '',
+    hour: '',
+    symptoms: ''
+  });
 
+  console.log(appointment);
+
+  const handleChange = e =>  {
+    e.preventDefault();
+
+    setAppointment({
+      ...appointment,
+      [e.target.name]: e.target.value
+    });
+  }
+
+  return (
     <React.Fragment>
       <h2>Add Appointment</h2>
       <form>
         <label>Pet's Name</label>
         <input 
           type="text" 
-          name="mascota"
+          name="pet"
           className="u-full-width" 
           placeholder="Pet's Name" 
+          onChange={ handleChange }
         />
 
         <label>Owner's Name</label>
         <input 
           type="text" 
-          name="propietario"
+          name="owner"
           className="u-full-width"  
           placeholder="Owner's Name" 
+          onChange={ handleChange }
         />
 
         <label>Date</label>
         <input 
           type="date" 
           className="u-full-width"
-          name="fecha"
+          name="date"
+          onChange={ handleChange }
         />               
 
         <label>Hour</label>
         <input 
           type="time" 
           className="u-full-width"
-          name="hora" 
+          name="hour" 
+          onChange={ handleChange }
         />
 
         <label>Symptoms</label>
         <textarea 
           className="u-full-width"
-          name="sintomas"
+          name="symptoms"
+          onChange={ handleChange }
         ></textarea>
 
         <button type="submit" className="button-primary u-full-width">Add</button>
