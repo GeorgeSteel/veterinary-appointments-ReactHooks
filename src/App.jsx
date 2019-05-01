@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Date({date}) {
+function Date({date, index, deleteDate}) {
   return(
     <div className="cita">
       <p>Pet: <span>{ date.pet }</span></p>
@@ -8,6 +8,7 @@ function Date({date}) {
       <p>Date: <span>{ date.date }</span></p>
       <p>Hour: <span>{ date.hour }</span></p>
       <p>Symptoms: <span>{ date.symptoms }</span></p>
+      <button className="button eliminar u-full-width" type="button" onClick={() => deleteDate(index)}>Delete X</button>
     </div>
   )
 }
@@ -106,6 +107,16 @@ function App() {
     setDate(newDates);
   }
 
+  // delete date
+  const deleteDate = idx => {
+    const newDates = [...date];
+    newDates.splice(idx, 1);
+
+    setDate(newDates);
+  }
+
+  // set the title conditionally
+  const title = date.length === 0 ? 'No dates added' : 'Dates Management';
   return (
     <React.Fragment>
       <h1>Patient Manager</h1>
@@ -117,11 +128,13 @@ function App() {
             />
           </div>
           <div className="one-half column">
+            <h1>{ title }</h1>
             { date.map((date, idx) => (
               <Date
                 key={idx}
                 index={idx}
                 date={date}
+                deleteDate={deleteDate}
               />
             )) }
           </div>
